@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Define o conjunto de caracteres do documento como UTF-8 -->
+    <meta charset="UTF-8">
+    <!-- Define a viewport para garantir que o site seja exibido corretamente em dispositivos móveis -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Define o título da página que aparece na aba do navegador -->
+    <title>URL Analytics</title>
+
+    <!-- Inclui o CSS do Bootstrap para estilização -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- Inclui fontes do Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+    <!-- Inclui ícones do Google Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- CSS personalizado para estilização adicional -->
+    <style>
+        /* Estilização do corpo da página */
+        body {
+            font-family: 'Poppins', sans-serif; /* Fonte utilizada */
+            background-color: #f8f9fa; /* Cor de fundo padrão */
+            color: #343a40; /* Cor do texto padrão */
+            transition: background-color 0.5s, color 0.5s; /* Transição suave para mudanças de tema */
+        }
+
+        /* Estilização para o modo escuro */
+        .dark-mode {
+            background-color: #343a40; /* Cor de fundo para modo escuro */
+            color: #f8f9fa; /* Cor do texto para modo escuro */
+        }
+
+        /* Estilização da barra de navegação */
+        .navbar {
+            background-color: #007bff; /* Cor de fundo padrão da navbar */
+            padding: 15px; /* Padding da navbar */
+            transition: background-color 0.5s; /* Transição suave para mudanças de cor */
+        }
+
+        /* Estilização da navbar no modo escuro */
+        .dark-mode .navbar {
+            background-color: #0056b3; /* Cor de fundo da navbar no modo escuro */
+        }
+
+        /* Estilização dos itens da navbar */
+        .navbar-nav {
+            display: flex; /* Exibição flexível */
+            justify-content: center; /* Alinha itens ao centro */
+            margin-right: 119px; /* Margem à direita */
+        }
+
+        .navbar-nav .nav-item {
+            margin-left: 20px; /* Margem à esquerda dos itens */
+        }
+
+        .navbar-nav .nav-link {
+            color: #ffffff !important; /* Cor do texto dos links */
+            font-weight: 500; /* Peso da fonte dos links */
+            transition: color 0.3s ease; /* Transição suave para a cor dos links */
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #ffcc00 !important; /* Cor do texto ao passar o mouse */
+        }
+
+        /* Estilização do conteúdo principal */
+        .content {
+            margin-top: 80px; /* Margem superior para criar espaço abaixo da navbar */
+        }
+
+        /* Estilização do título */
+        h1 {
+            font-size: 2.5rem; /* Tamanho da fonte */
+            font-weight: 700; /* Peso da fonte */
+            color: #007bff; /* Cor do título */
+        }
+
+        /* Estilização do título no modo escuro */
+        .dark-mode h1 {
+            color: #ffcc00; /* Cor do título no modo escuro */
+        }
+
+        /* Estilização da tabela */
+        .table {
+            margin-top: 20px; /* Margem superior */
+            background-color: #ffffff; /* Cor de fundo padrão */
+            border-radius: 10px; /* Bordas arredondadas */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra da tabela */
+            color: #343a40; /* Cor do texto da tabela */
+        }
+
+        /* Estilização da tabela no modo escuro */
+        .dark-mode .table {
+            background-color: #4f4f4f; /* Cor de fundo da tabela no modo escuro */
+            color: #f8f9fa; /* Cor do texto da tabela no modo escuro */
+        }
+
+        /* Estilização do cabeçalho da tabela */
+        thead {
+            background-color: #007bff; /* Cor de fundo do cabeçalho */
+            color: #ffffff; /* Cor do texto do cabeçalho */
+            font-weight: 700; /* Peso da fonte do cabeçalho */
+        }
+
+        /* Estilização do cabeçalho da tabela no modo escuro */
+        .dark-mode thead {
+            background-color: #0056b3; /* Cor de fundo do cabeçalho no modo escuro */
+        }
+
+        /* Estilização das células da tabela */
+        th, td {
+            padding: 12px; /* Padding das células */
+            text-align: center; /* Alinha o texto ao centro */
+            color: #343a40; /* Cor do texto das células */
+        }
+
+        /* Estilização das células da tabela no modo escuro */
+        .dark-mode th, .dark-mode td {
+            color: #f8f9fa; /* Cor do texto das células no modo escuro */
+        }
+
+        /* Estilização dos botões */
+        .btn {
+            margin: 10px; /* Margem ao redor dos botões */
+            padding: 10px 20px; /* Padding dos botões */
+            border-radius: 50px; /* Bordas arredondadas */
+            font-weight: 500; /* Peso da fonte dos botões */
+            transition: background-color 0.3s ease, color 0.3s ease; /* Transição suave para fundo e cor dos botões */
+        }
+
+        .btn-success {
+            background-color: #28a745; /* Cor de fundo do botão de sucesso */
+            border: none; /* Remove a borda do botão */
+        }
+
+        .btn-success:hover {
+            background-color: #218838; /* Cor de fundo ao passar o mouse */
+        }
+
+        .btn-warning {
+            background-color: #ffc107; /* Cor de fundo do botão de aviso */
+            border: none; /* Remove a borda do botão */
+            color: #343a40; /* Cor do texto do botão */
+        }
+
+        .btn-warning:hover {
+            background-color: #e0a800; /* Cor de fundo ao passar o mouse */
+        }
+
+        .btn-primary {
+            background-color: #007bff; /* Cor de fundo do botão primário */
+            border: none; /* Remove a borda do botão */
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3; /* Cor de fundo ao passar o mouse */
+        }
+
+        /* Estilização do contêiner de gráficos */
+        .chart-container {
+            position: relative; /* Posição relativa para o gráfico */
+            width: 100%; /* Largura do contêiner */
+            margin: 0 auto; /* Centraliza o contêiner */
+            max-width: 900px; /* Largura máxima do contêiner */
+        }
+
+        .chart-container canvas {
+            border-radius: 10px; /* Bordas arredondadas do gráfico */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra do gráfico */
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .navbar-nav {
+                flex-direction: column; /* Alinha itens verticalmente */
+                margin-left: 0; /* Remove margem à esquerda */
+                margin-right: 0; /* Remove margem à direita */
+                width: 100%; /* Largura total da navbar */
+                text-align: center; /* Alinha itens ao centro */
+            }
+
+            .navbar-nav .nav-item {
+                margin-left: 0; /* Remove margem à esquerda dos itens */
+                margin-top: 10px; /* Margem superior dos itens */
+            }
+
+            .navbar-nav .nav-item:first-child {
+                margin-top: 0; /* Remove margem superior do primeiro item */
+            }
+
+            .navbar-toggler {
+                margin-right: 10px; /* Margem à direita do botão de alternância */
+            }
+
+            h1 {
+                font-size: 2rem; /* Tamanho da fonte do título em telas pequenas */
+            }
+
+            .table {
+                font-size: 0.9rem; /* Tamanho da fonte da tabela em telas pequenas */
+            }
+
+            .btn {
+                padding: 8px 16px; /* Padding dos botões em telas pequenas */
+                font-size: 0.9rem; /* Tamanho da fonte dos botões em telas pequenas */
+            }
+        }
+
+        /* Estilização do ícone de alternância de tema */
+        .theme-toggle {
+            cursor: pointer; /* Muda o cursor para indicar que o ícone é clicável */
+            color: #ffffff; /* Cor do ícone */
+            transition: color 0.3s ease; /* Transição suave para a cor do ícone */
+        }
+
+        .theme-toggle:hover {
+            color: #ffcc00 !important; /* Cor do ícone ao passar o mouse */
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar: barra de navegação -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <a class="navbar-brand" href="#" style="letter-spacing: 1px;"><strong>URL Shortener</strong></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('show_urls') }}">Show All URLs</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('charts') }}">View Analytics</a>
+                </li>
+            </ul>
+        </div>
+        <div>
+            <!-- Ícone para alternar o tema -->
+            <span class="material-icons theme-toggle" onclick="toggleTheme()">brightness_6</span>
+        </div>
+    </nav>
+
+    <!-- Conteúdo principal -->
+    <div class="container content text-center">
+        <h1 class="mt-5">URL Analytics</h1>
+        <div class="my-4 chart-container">
+            <!-- Canvas para o gráfico -->
+            <canvas id="urlChart" width="600" height="400"></canvas>
+        </div>
+        <div class="table-responsive">
+            <!-- Tabela para exibir dados das URLs -->
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Short Code</th>
+                        <th>Original URL</th>
+                        <th>Clicks</th>
+                        <th>Created At</th>
+                        <th>Last Click At</th>
+                        <th>Last Click IP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Laço para preencher dados das URLs -->
+                    {% for url in url_data %}
+                    <tr>
+                        <td>{{ url.short_code }}</td>
+                        <td>{{ url.original_url }}</td>
+                        <td>{{ url.click_count }}</td>
+                        <td>{{ url.created_at }}</td>
+                        <td>{{ url.last_click_at if url.last_click_at else 'Never' }}</td>
+                        <td>{{ url.last_click_ip if url.last_click_ip else 'N/A' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="text-center mt-4">
+            <!-- Botões para download dos relatórios -->
+            <a href="{{ url_for('download_report', file_type='xlsx') }}" class="btn btn-success">Download Excel Report</a>
+            <a href="{{ url_for('download_report', file_type='docx') }}" class="btn btn-warning">Download Word Report</a>
+            <a href="{{ url_for('download_report', file_type='pptx') }}" class="btn btn-primary">Download PowerPoint Report</a>
+        </div>
+    </div>
+
+    <!-- Inclui a biblioteca Chart.js para gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- JavaScript personalizado para o gráfico e alternância de tema -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var ctx = document.getElementById('urlChart').getContext('2d');
+            var urlData = {{ url_data | tojson }};
+            var chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: urlData.map(url => url.short_code),
+                    datasets: [{
+                        label: 'Clicks',
+                        data: urlData.map(url => url.click_count),
+                        backgroundColor: 'rgba(0, 123, 255, 0.6)',
+                        borderColor: 'rgba(0, 123, 255, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: '#6c757d',
+                                font: {
+                                    size: 14
+                                }
+                            },
+                            grid: {
+                                display: false
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: '#6c757d',
+                                font: {
+                                    size: 14
+                                }
+                            },
+                            grid: {
+                                color: '#dee2e6'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#6c757d',
+                                font: {
+                                    size: 16
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    return context.dataset.label + ': ' + context.raw;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+
+        // Função para alternar o tema claro/escuro
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+        }
+    </script>
+
+    <!-- Inclui JavaScript e dependências do Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

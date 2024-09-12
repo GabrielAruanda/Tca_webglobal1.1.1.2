@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Define o conjunto de caracteres do documento como UTF-8 -->
+    <meta charset="UTF-8">
+    <!-- Define a viewport para garantir que o site seja exibido corretamente em dispositivos móveis -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Define o título da página que aparece na aba do navegador -->
+    <title>All Shortened URLs</title>
+
+    <!-- Inclui o CSS do Bootstrap para estilização -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Inclui fontes do Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+    <!-- Inclui ícones do Google Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- CSS personalizado para estilização adicional -->
+    <style>
+        /* Estilização do corpo da página */
+        body {
+            font-family: 'Poppins', sans-serif; /* Fonte utilizada */
+            background-color: #f8f9fa; /* Cor de fundo padrão */
+            color: #343a40; /* Cor do texto padrão */
+            transition: background-color 0.5s, color 0.5s; /* Transição suave para mudanças de tema */
+        }
+
+        /* Estilização para o modo escuro */
+        .dark-mode {
+            background-color: #343a40; /* Cor de fundo para modo escuro */
+            color: #f8f9fa; /* Cor do texto para modo escuro */
+        }
+
+        /* Estilização da barra de navegação */
+        .navbar {
+            background-color: #007bff; /* Cor de fundo padrão da navbar */
+            padding: 15px; /* Padding da navbar */
+            transition: background-color 0.5s; /* Transição suave para mudanças de cor */
+        }
+
+        /* Estilização da navbar no modo escuro */
+        .dark-mode .navbar {
+            background-color: #0056b3; /* Cor de fundo da navbar no modo escuro */
+        }
+
+        /* Estilização da marca na navbar */
+        .navbar-brand {
+            font-weight: 700; /* Peso da fonte para a marca */
+            letter-spacing: 1px; /* Espaçamento entre letras */
+        }
+
+        /* Estilização dos itens da navbar */
+        .navbar-nav {
+            display: flex; /* Alinha os itens horizontalmente */
+            justify-content: center; /* Centraliza os itens */
+            margin-right: 150px; /* Margem à direita */
+        }
+
+        .navbar-nav .nav-item {
+            margin-left: 20px; /* Margem à esquerda dos itens */
+        }
+
+        .navbar-nav .nav-link {
+            color: #ffffff !important; /* Cor do texto dos links */
+            font-weight: 500; /* Peso da fonte dos links */
+            transition: color 0.3s ease; /* Transição suave para a cor dos links */
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #ffcc00 !important; /* Cor do texto ao passar o mouse */
+        }
+
+        /* Estilização responsiva para telas menores */
+        @media (max-width: 991px) {
+            .navbar-nav {
+                flex-direction: column; /* Alinha os itens verticalmente */
+                text-align: center; /* Centraliza o texto */
+                margin-left: 0; /* Remove a margem à esquerda */
+                margin-right: 0; /* Remove a margem à direita */
+            }
+            .navbar-nav .nav-item {
+                margin-left: 0; /* Remove a margem à esquerda dos itens */
+                margin-top: 10px; /* Adiciona margem superior */
+            }
+            .navbar-nav .nav-item:first-child {
+                margin-top: 0; /* Remove a margem superior do primeiro item */
+            }
+        }
+
+        /* Estilização do conteúdo principal */
+        .content {
+            margin-top: 100px; /* Margem superior para criar espaço abaixo da navbar */
+        }
+
+        /* Estilização do container */
+        .container {
+            padding-top: 20px; /* Padding superior */
+        }
+
+        /* Estilização da tabela */
+        .table {
+            background-color: #ffffff; /* Cor de fundo padrão da tabela */
+            border-radius: 10px; /* Bordas arredondadas */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra da tabela */
+        }
+
+        /* Estilização da tabela no modo escuro */
+        .dark-mode .table {
+            background-color: #4f4f4f; /* Cor de fundo da tabela no modo escuro */
+            color: #ffffff; /* Cor do texto da tabela no modo escuro */
+            border-color: #6c757d; /* Cor da borda da tabela no modo escuro */
+        }
+
+        .dark-mode .table-hover tbody tr:hover {
+            background-color: #6c757d; /* Cor de fundo ao passar o mouse sobre as linhas no modo escuro */
+        }
+
+        /* Estilização do cabeçalho da tabela */
+        .tabela {
+            background-color: #007bff; /* Cor de fundo do cabeçalho da tabela */
+            color: #ffffff; /* Cor do texto do cabeçalho da tabela */
+            font-weight: 700; /* Peso da fonte do cabeçalho */
+        }
+
+        /* Estilização do cabeçalho da tabela no modo escuro */
+        .dark-mode .tabela {
+            background-color: #0056b3; /* Cor de fundo do cabeçalho no modo escuro */
+        }
+
+        /* Estilização dos botões primários */
+        .btn-primary {
+            background-color: #007bff; /* Cor de fundo do botão */
+            border: none; /* Remove a borda do botão */
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3; /* Cor de fundo ao passar o mouse */
+        }
+
+        /* Estilização dos botões primários no modo escuro */
+        .dark-mode .btn-primary {
+            background-color: #0056b3; /* Cor de fundo no modo escuro */
+        }
+
+        .dark-mode .btn-primary:hover {
+            background-color: #003d7a; /* Cor de fundo ao passar o mouse no modo escuro */
+        }
+
+        /* Estilização dos botões secundários no modo escuro */
+        .dark-mode .btn-secondary {
+            background-color: #6c757d; /* Cor de fundo dos botões secundários no modo escuro */
+            border-color: #6c757d; /* Cor da borda dos botões secundários */
+            color: #ffffff; /* Cor do texto dos botões secundários */
+        }
+
+        .dark-mode .btn-secondary:hover {
+            background-color: #5a6268; /* Cor de fundo ao passar o mouse no modo escuro */
+            border-color: #545b62; /* Cor da borda ao passar o mouse no modo escuro */
+        }
+
+        /* Estilização dos botões de informação no modo escuro */
+        .dark-mode .btn-info {
+            background-color: #17a2b8; /* Cor de fundo dos botões de informação no modo escuro */
+            border-color: #17a2b8; /* Cor da borda dos botões de informação */
+            color: #ffffff; /* Cor do texto dos botões de informação */
+        }
+
+        .dark-mode .btn-info:hover {
+            background-color: #138496; /* Cor de fundo ao passar o mouse no modo escuro */
+            border-color: #117a8b; /* Cor da borda ao passar o mouse no modo escuro */
+        }
+
+        /* Estilização para truncar texto */
+        .text-truncate {
+            overflow: hidden; /* Oculta o texto que ultrapassa o limite */
+            text-overflow: ellipsis; /* Adiciona reticências (...) ao texto que ultrapassa o limite */
+            white-space: nowrap; /* Impede a quebra de linha */
+        }
+
+        /* Estilização responsiva para tabelas */
+        @media (max-width: 768px) {
+            .table-responsive {
+                overflow-x: auto; /* Adiciona rolagem horizontal em telas pequenas */
+            }
+        }
+
+        /* Estilização do ícone de alternância de tema */
+        .theme-toggle {
+            cursor: pointer; /* Muda o cursor para indicar que o ícone é clicável */
+            color: #ffffff; /* Cor do ícone */
+            transition: color 0.3s ease; /* Transição suave para a cor do ícone */
+        }
+
+        .theme-toggle:hover {
+            color: #ffcc00 !important; /* Cor do ícone ao passar o mouse */
+        }
+
+        /* Estilização dos inputs no modo escuro */
+        .dark-mode input, .dark-mode select, .dark-mode textarea {
+            background-color: #4f4f4f; /* Cor de fundo dos inputs no modo escuro */
+            color: #ffffff; /* Cor do texto dos inputs */
+            border-color: #6c757d; /* Cor da borda dos inputs */
+        }
+
+        .dark-mode input::placeholder, .dark-mode textarea::placeholder {
+            color: #d6d6d6; /* Cor do placeholder dos inputs */
+        }
+
+        .dark-mode input:focus, .dark-mode select:focus, .dark-mode textarea:focus {
+            background-color: #6c757d; /* Cor de fundo dos inputs ao focar */
+            border-color: #8a8a8a; /* Cor da borda dos inputs ao focar */
+            color: #ffffff; /* Cor do texto dos inputs ao focar */
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar: barra de navegação -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <!-- Marca na barra de navegação -->
+        <a class="navbar-brand" href="#">URL Shortener</a>
+        <!-- Botão para colapsar a navbar em telas pequenas -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- Itens da navbar colapsados em telas pequenas -->
+        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+            <ul class="navbar-nav">
+                <!-- Link para a página inicial -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+                </li>
+                <!-- Link para a página de todas as URLs -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('show_urls') }}">Show All URLs</a>
+                </li>
+                <!-- Link para a página de analytics -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('charts') }}">View Analytics</a>
+                </li>
+            </ul>
+        </div>
+        <!-- Ícone para alternar entre o modo claro e escuro -->
+        <div>
+            <span class="material-icons theme-toggle" onclick="toggleTheme()">brightness_6</span>
+        </div>
+    </nav>
+
+    <!-- Conteúdo principal -->
+    <div class="container content">
+        <h1 class="text-center mb-4">🔗 All Shortened URLs</h1>
+
+        <!-- Tabela responsiva para exibir URLs encurtadas -->
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover mt-4">
+                <thead class="tabela">
+                    <tr>
+                        <th scope="col">Original URL</th>
+                        <th scope="col">Shortened URL</th>
+                        <th scope="col">Clicks</th>
+                        <th scope="col">Creation Date</th>
+                        <th scope="col">Last Click</th>
+                        <th scope="col">Last Click IP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Itera sobre a lista de URLs e exibe cada uma em uma linha da tabela -->
+                    {% for url in urls %}
+                    <tr>
+                        <td class="text-truncate">{{ url.original_url }}</td>
+                        <td class="text-truncate"><a href="{{ url.short_code }}" target="_blank">{{ url.short_code }}</a></td>
+                        <td>{{ url.click_count }}</td>
+                        <td>{{ url.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                        <td>{{ url.last_click_at.strftime('%Y-%m-%d %H:%M:%S') if url.last_click_at else 'Never' }}</td>
+                        <td>{{ url.last_click_ip if url.last_click_ip else 'N/A' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Botões para voltar para a página inicial ou visualizar analytics -->
+        <div class="text-center mt-4">
+            <a href="{{ url_for('index') }}" class="btn btn-secondary btn-lg">Back to Home</a>
+            <a href="{{ url_for('charts') }}" class="btn btn-info btn-lg">View Analytics</a>
+        </div>
+    </div>
+
+    <!-- Inclui o JS do Bootstrap e suas dependências -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- JavaScript personalizado para alternar o tema e atualizar a página automaticamente -->
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode'); // Alterna a classe de modo escuro
+        }
+
+        // Atualiza a página a cada 15 segundos
+        setInterval(function() {
+            location.reload();
+        }, 15000); // 15000 milissegundos = 15 segundos
+    </script>
+</body>
+</html>

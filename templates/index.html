@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Define o conjunto de caracteres do documento como UTF-8 -->
+    <meta charset="UTF-8">
+    <!-- Define a viewport para garantir que o site seja exibido corretamente em dispositivos móveis -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Define o título da página que aparece na aba do navegador -->
+    <title>URL Shortener</title>
+
+    <!-- Favicon da página -->
+    <link rel="icon" href="https://img.icons8.com/ios-filled/50/000000/link.png" type="image/x-icon">
+
+    <!-- Inclui o CSS do Bootstrap para estilização -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Inclui fontes do Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+    <!-- Inclui ícones do Google Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- CSS personalizado para estilização adicional -->
+    <style>
+        /* Estilização do corpo da página */
+        body {
+            font-family: 'Poppins', sans-serif; /* Fonte utilizada */
+            background-color: #f8f9fa; /* Cor de fundo padrão */
+            color: #343a40; /* Cor do texto padrão */
+            transition: background-color 0.5s, color 0.5s; /* Transição suave para mudanças de tema */
+        }
+
+        /* Estilização para o modo escuro */
+        .dark-mode {
+            background-color: #343a40; /* Cor de fundo para modo escuro */
+            color: #f8f9fa; /* Cor do texto para modo escuro */
+        }
+
+        /* Estilização da barra de navegação */
+        .navbar {
+            background-color: #007bff; /* Cor de fundo padrão da navbar */
+            padding: 15px; /* Padding da navbar */
+            transition: background-color 0.5s; /* Transição suave para mudanças de cor */
+            display: flex; /* Exibição flexível */
+            justify-content: space-between; /* Alinha itens ao espaço disponível */
+        }
+
+        /* Estilização da navbar no modo escuro */
+        .dark-mode .navbar {
+            background-color: #0056b3; /* Cor de fundo da navbar no modo escuro */
+        }
+
+        /* Estilização da marca na navbar */
+        .navbar-brand {
+            font-weight: 700; /* Peso da fonte para a marca */
+            letter-spacing: 1px; /* Espaçamento entre letras */
+        }
+
+        /* Estilização dos itens da navbar */
+        .navbar-nav {
+            display: flex; /* Alinha os itens horizontalmente */
+            justify-content: center; /* Centraliza os itens */
+            margin-right: 150px; /* Margem à direita */
+        }
+
+        .navbar-nav .nav-item {
+            margin-left: 20px; /* Margem à esquerda dos itens */
+        }
+
+        .navbar-nav .nav-link {
+            color: #ffffff !important; /* Cor do texto dos links */
+            font-weight: 500; /* Peso da fonte dos links */
+            transition: color 0.3s ease; /* Transição suave para a cor dos links */
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #ffcc00 !important; /* Cor do texto ao passar o mouse */
+        }
+
+        /* Estilização do conteúdo principal */
+        .content {
+            margin-top: 100px; /* Margem superior para criar espaço abaixo da navbar */
+        }
+
+        /* Estilização do formulário de URL */
+        .url-form-container {
+            margin-top: 50px; /* Margem superior */
+        }
+
+        /* Estilização dos cartões */
+        .card {
+            border-radius: 10px; /* Bordas arredondadas */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra do cartão */
+        }
+
+        /* Estilização dos cartões no modo escuro */
+        .dark-mode .card {
+            background-color: #4f4f4f; /* Cor de fundo do cartão no modo escuro */
+        }
+
+        /* Estilização dos botões primários */
+        .btn-primary {
+            background-color: #007bff; /* Cor de fundo do botão */
+            border: none; /* Remove a borda do botão */
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3; /* Cor de fundo ao passar o mouse */
+        }
+
+        /* Estilização dos alertas */
+        .alert {
+            border-radius: 10px; /* Bordas arredondadas */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra do alerta */
+        }
+
+        /* Estilização dos alertas no modo escuro */
+        .dark-mode .alert {
+            background-color: #3a3a3a; /* Cor de fundo do alerta no modo escuro */
+        }
+
+        /* Estilização do ícone de alternância de tema */
+        .theme-toggle {
+            cursor: pointer; /* Muda o cursor para indicar que o ícone é clicável */
+            color: #ffffff; /* Cor do ícone */
+            transition: color 0.3s ease; /* Transição suave para a cor do ícone */
+        }
+
+        .theme-toggle:hover {
+            color: #ffcc00 !important; /* Cor do ícone ao passar o mouse */
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar: barra de navegação -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <!-- Marca na barra de navegação -->
+        <a class="navbar-brand" href="#">URL Shortener</a>
+        <!-- Botão para colapsar a navbar em telas pequenas -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- Itens da navbar colapsados em telas pequenas -->
+        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+            <ul class="navbar-nav">
+                <!-- Link para a página inicial -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+                </li>
+                <!-- Link para a página de todas as URLs -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('show_urls') }}">Show All URLs</a>
+                </li>
+                <!-- Link para a página de analytics -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('charts') }}">View Analytics</a>
+                </li>
+            </ul>
+        </div>
+        <!-- Ícone para alternar entre o modo claro e escuro -->
+        <div>
+            <span class="material-icons theme-toggle" onclick="toggleTheme()">brightness_6</span>
+        </div>
+    </nav>
+
+    <!-- Conteúdo principal -->
+    <div class="container content text-center">
+        <!-- Container para o formulário de URL -->
+        <div class="url-form-container">
+            <div class="card p-4">
+                <h1 class="text-center mb-4">✨ URL Shortener</h1>
+                <p class="text-center mb-5 text-muted">Transform your long URLs into short, manageable links!</p>
+
+                <!-- Formulário para encurtar URLs -->
+                <div class="row justify-content-center">
+                    <div class="col-md-10">
+                        <form id="url-form" method="POST" action="/" class="form-inline justify-content-center">
+                            <input type="url" name="original_url" class="form-control form-control-lg mr-2 mb-2 mb-md-0" placeholder="Enter your URL here" required>
+                            <button class="btn btn-primary btn-lg d-flex align-items-center" type="submit">
+                                <span class="material-icons mr-2">link</span>
+                                Shorten
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Alerta de sucesso após encurtar a URL -->
+                {% if short_url %}
+                <div class="alert alert-success mt-4">
+                    <h4 class="alert-heading">Success!</h4>
+                    <p>Your shortened URL:</p>
+                    <a href="{{ short_url }}" target="_blank" class="btn btn-success">{{ short_url }}</a>
+                    <p class="mt-3">Clicks: {{ click_count }}</p>
+                </div>
+                {% endif %}
+
+                <!-- Botões para voltar para a página de todas as URLs ou visualizar analytics -->
+                <div class="text-center mt-4">
+                    <a href="{{ url_for('show_urls') }}" class="btn btn-secondary btn-lg mr-2">Show All URLs</a>
+                    <a href="{{ url_for('charts') }}" class="btn btn-info btn-lg">View Analytics</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inclui o JS do Bootstrap e suas dependências -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- JavaScript personalizado para alternar o tema -->
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode'); // Alterna a classe de modo escuro
+        }
+    </script>
+</body>
+</html>
