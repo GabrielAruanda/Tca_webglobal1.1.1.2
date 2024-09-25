@@ -183,48 +183,76 @@ def download_report(file_type):
                 f"Original URL: {url['original_url']}\n"
                 f"Clicks: {url['click_count']}\n"
                 f"Created At: {url['created_at'].strftime('%Y-%m-%d %H:%M:%S')}\n"
-                f"Last Click At: {url['last_click_at'].strftime('%Y-%m-%d %H:%M:%S')}\n"
-                f"Last Click IP: {url['last_click_ip']}"
+                f"Last Click: {url['last_click_at'].strftime('%Y-%m-%d %H:%M:%S') if url['last_click_at'] else 'N/A'}\n"
+                f"Last Click IP: {url['last_click_ip'] or 'N/A'}"
             )
 
-        # Salva a apresentação em um buffer de bytes e envia como arquivo para download.
-        byte_io = io.BytesIO()
-        prs.save(byte_io)
-        byte_io.seek(0)
-        return send_file(byte_io, as_attachment=True, download_name="report.pptx", mimetype="application/vnd.openxmlformats-officedocument.presentationml.presentation")
-
-    elif file_type == 'docx':
-        # Cria um documento Word.
-        doc = Document()
-        doc.add_heading('Relatório de URLs Encurtadas', level=1)
-
-        # Adiciona informações das URLs ao documento Word.
-        for url in urls:
-            doc.add_heading(f"Short Code: {url['short_code']}", level=2)
-            doc.add_paragraph(
-                f"Original URL: {url['original_url']}\n"
-                f"Clicks: {url['click_count']}\n"
-                f"Created At: {url['created_at'].strftime('%Y-%m-%d %H:%M:%S')}\n"
-                f"Last Click At: {url['last_click_at'].strftime('%Y-%m-%d %H:%M:%S')}\n"
-                f"Last Click IP: {url['last_click_ip']}"
-            )
-
-        # Salva o documento em um buffer de bytes e envia como arquivo para download.
-        byte_io = io.BytesIO()
-        doc.save(byte_io)
-        byte_io.seek(0)
-        return send_file(byte_io, as_attachment=True, download_name="report.docx", mimetype="application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+        # Salva a apresentação em memória.
+        output = io.BytesIO()
+        prs.save(output)
+        output.seek(0)
+        return send_file(output, as_attachment=True, download_name='report.pptx')
 
     elif file_type == 'xlsx':
         # Cria um arquivo Excel.
         df = pd.DataFrame(urls)
-        byte_io = io.BytesIO()
-        df.to_excel(byte_io, index=False, sheet_name='URLs')
-        byte_io.seek(0)
-        return send_file(byte_io, as_attachment=True, download_name="report.xlsx", mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        output = io.BytesIO()
+        writer = pd.ExcelWriter(output, engine='xlsxwriter')
 
-    return "Tipo de arquivo não suportado", 400  # Retorna um erro 400 se o tipo de arquivo não for suportado.
+        # Escreve os dados no Excel.
+        df.to_excel(writer, sheet_name='URLs', index=False)
+        writer.save()
+        output.seek(0)
+
+        return send_file(output, as_attachment=True, download_name='report.xlsx')
+
+    elif file_type == 'docx':
+        # Cria um documento Word.
+        doc = Document()
+        doc.add_heading('URL Report', 0)
+
+        # Adiciona informações de cada URL ao documento.
+        for url in urls:
+            doc.add_heading(f"Short Code: {url['short_code']}", level=1)
+            doc.add_paragraph(
+                f"Original URL: {url['original_url']}\n"
+                f"Clicks: {url['click_count']}\n"
+                f"Created At: {url['created_at'].strftime('%Y-%m-%d %H:%M:%S')}\n"
+                f"Last Click: {url['last_click_at'].strftime('%Y-%m-%d %H:%M:%S') if url['last_click_at'] else 'N/A'}\n"
+                f"Last Click IP: {url['last_click_ip'] or 'N/A'}"
+            )
+
+        # Salva o documento em memória.
+        output = io.BytesIO()
+        doc.save(output)
+        output.seek(0)
+
+        return send_file(output, as_attachment=True, download_name='report.docx')
+
+    else:
+        return "Invalid file type", 400  # Retorna um erro 400 se o tipo de arquivo for inválido.
+
+@app.route("/search", methods=["GET"])
+def search():
+    """Rota para a página de pesquisa."""
+    query = request.args.get("q")  # Pega a consulta do usuário
+    search_path = request.args.get("path")  # Pega o diretório ou URL
+
+    # Verifica se o parâmetro 'path' está vazio ou None
+    if not search_path:
+        return render_template("search.html", error="Erro: O parâmetro de caminho não foi fornecido."), 400
+
+    print(f"Query: {query}, Search Path: {search_path}")  # Para depuração
+
+    # Se o caminho for uma URL
+    if is_url(search_path):
+        result = search_online(search_path)
+        return render_template("search.html", query=query, result=result)
+    else:
+        # Busca em arquivos locais se for um diretório
+        results = search_local_files(search_path, query)
+        return render_template("search.html", query=query, results=results)
 
 if __name__ == "__main__":
     app.run(debug=True)
-    # Inicia o servidor Flask em modo de depuração.
+
