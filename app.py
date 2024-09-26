@@ -197,14 +197,14 @@ def download_report(file_type):
         # Cria um arquivo Excel.
         df = pd.DataFrame(urls)
         output = io.BytesIO()
-        writer = pd.ExcelWriter(output, engine='xlsxwriter')
-
-        # Escreve os dados no Excel.
-        df.to_excel(writer, sheet_name='URLs', index=False)
-        writer.save()
+        with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+            # Escreve os dados no Excel.
+            df.to_excel(writer, sheet_name='URLs', index=False)
+            # Não é necessário chamar writer.save(); isso acontece automaticamente ao sair do bloco with.
         output.seek(0)
 
         return send_file(output, as_attachment=True, download_name='report.xlsx')
+
 
     elif file_type == 'docx':
         # Cria um documento Word.
