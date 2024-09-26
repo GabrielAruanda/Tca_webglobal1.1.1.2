@@ -232,26 +232,98 @@ def download_report(file_type):
     else:
         return "Invalid file type", 400  # Retorna um erro 400 se o tipo de arquivo for inválido.
 
+# Rota para exibir e registrar links
+@app.route('/register_url', methods=['GET', 'POST'])
+def register_url():
+    if request.method == 'POST':
+        name = request.form['name']
+        link_type = request.form['link_type']
+        url = request.form['url']
+
+        # Conectar ao banco de dados e registrar o link
+        conn = mysql.connector.connect(**db_config)
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO links (name, link_type, url) VALUES (%s, %s, %s)", (name, link_type, url))
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        return redirect('/register_url')  # Redirecionar após o cadastro
+
+    # Recuperar os links cadastrados com cliques e últimos IPs
+    conn = mysql.connector.connect(**db_config)
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("""
+        SELECT 
+            l.id AS link_id,
+            l.name,
+            l.link_type,
+            l.url,
+            l.created_at,
+            COALESCE(COUNT(c.id), 0) AS clicks,
+            COALESCE(MAX(c.ip_address), 'N/A') AS last_ip
+        FROM 
+            links l
+        LEFT JOIN 
+            clicks_links c ON l.id = c.url_id
+        GROUP BY 
+            l.id
+    """)
+    links = cursor.fetchall()
+    cursor.close()
+    conn.close()
+
+    return render_template('search.html', links=links)  # Renderizar a página com os links cadastrados
+
+
+# Função para exibir os links cadastrados
 @app.route("/search", methods=["GET"])
 def search():
-    """Rota para a página de pesquisa."""
-    query = request.args.get("q")  # Pega a consulta do usuário
-    search_path = request.args.get("path")  # Pega o diretório ou URL
+    query = request.args.get("q")
+    search_path = request.args.get("path")
 
-    # Verifica se o parâmetro 'path' está vazio ou None
+    # Código para verificar e processar a pesquisa
     if not search_path:
         return render_template("search.html", error="Erro: O parâmetro de caminho não foi fornecido."), 400
 
-    print(f"Query: {query}, Search Path: {search_path}")  # Para depuração
-
-    # Se o caminho for uma URL
+    # Processar o caminho se for uma URL
     if is_url(search_path):
         result = search_online(search_path)
         return render_template("search.html", query=query, result=result)
+
+    # Se for um diretório local
     else:
-        # Busca em arquivos locais se for um diretório
         results = search_local_files(search_path, query)
         return render_template("search.html", query=query, results=results)
+
+        # Rota para registrar cliques
+# Rota para registrar cliques
+@app.route('/click_link/<int:link_id>', methods=['GET'])
+def click_link(link_id):
+    # Capturar o endereço IP do usuário
+    ip_address = request.remote_addr
+
+    # Conectar ao banco de dados e registrar o clique
+    conn = mysql.connector.connect(**db_config)
+    cursor = conn.cursor()
+
+    # Inserir registro de clique
+    cursor.execute("INSERT INTO clicks_links (url_id, click_time, ip_address) VALUES (%s, NOW(), %s)", (link_id, ip_address))
+    conn.commit()
+
+    # Obter a URL original para redirecionar
+    cursor.execute("SELECT url FROM links WHERE id = %s", (link_id,))
+    original_url = cursor.fetchone()
+    
+    cursor.close()
+    conn.close()
+
+    if original_url:
+        return redirect(original_url[0])  # Redirecionar para a URL original
+
+    return "URL não encontrada", 404  # Caso a URL não exista
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
