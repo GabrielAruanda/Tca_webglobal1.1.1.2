@@ -324,7 +324,7 @@ def click_link(link_id):
     return "URL não encontrada", 404  # Caso a URL não exista
 
 
-
+ 
 if __name__ == "__main__":
     app.run(debug=True)
 
