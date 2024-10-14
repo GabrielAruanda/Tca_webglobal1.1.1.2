@@ -137,12 +137,23 @@ def charts():
 
     # Prepara os dados para o gráfico.
     df = pd.DataFrame(urls)
-    fig = px.bar(df, x='short_code', y='click_count', labels={'short_code': 'Short Code', 'click_count': 'Clicks'}, title='URL Clicks')
 
-    # Converte o gráfico para HTML.
-    chart_html = fig.to_html(full_html=False)
+    if urls:
+        fig = px.bar(df, x='short_code', y='click_count', labels={'short_code': 'Short Code', 'click_count': 'Clicks'}, title='URL Clicks')
 
-    return render_template("charts.html", url_data=urls, chart_html=chart_html)  # Renderiza a página com o gráfico das URLs e os dados.
+        # Converte o gráfico para HTML.
+        chart_html = fig.to_html(full_html=False)
+        return render_template("charts.html", url_data=urls, chart_html=chart_html)  # Renderiza a página com o gráfico das URLs e os dados.
+    url_vazio = [{
+        "short_code": None, 
+        "original_url": None, 
+        "click_count": None, 
+        "created_at": None, 
+        "last_click_at": None, 
+        "last_click_ip": None,
+    }]
+    return render_template("charts.html", url_data=url_vazio)
+
 
 @app.route("/download/<file_type>")
 def download_report(file_type):
@@ -153,6 +164,9 @@ def download_report(file_type):
     urls = cursor.fetchall()
     cursor.close()
 
+    if not urls:
+        return "nenhum dado", 400  # Retorna um erro 400 caso nenhum dado.
+        
     if file_type == 'pptx':
         # Cria uma apresentação PowerPoint.
         prs = Presentation()
@@ -326,5 +340,6 @@ def click_link(link_id):
 
  
 if __name__ == "__main__":
-    app.run(debug=True)
-
+    app.run(debug=True) 
+    
+    
