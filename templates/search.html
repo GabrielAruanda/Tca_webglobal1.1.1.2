@@ -45,11 +45,6 @@
             justify-content: center;
             margin-right: 150px;
         }
-        
-        .navbar-brand {
-            font-weight: 700;
-            letter-spacing: 1px;
-        }
 
         .navbar-nav .nav-item {
             margin-left: 20px;
@@ -66,7 +61,7 @@
         }
 
         .content {
-            margin-top: 100px;
+            margin-top: 80px;
         }
 
         h1 {
@@ -82,7 +77,10 @@
         .card {
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
+            margin-top: 52px;
+            max-width: 600px; /* Diminuir o tamanho da caixa */
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .dark-mode .card {
@@ -92,6 +90,8 @@
         .btn-primary {
             background-color: #007bff;
             border: none;
+            font-size: 0.875rem; /* Diminuir o tamanho do botão */
+            padding: 6px 12px; /* Ajustar o tamanho do botão */
         }
 
         .btn-primary:hover {
@@ -146,7 +146,7 @@
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
-        <a class="navbar-brand" href="#">URL Shortener</a>
+        <a class="navbar-brand" href="#" style="letter-spacing: 1px;"><strong>URL Shortener</strong></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -184,21 +184,21 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="email">E-mail</label>
-                    <input type="email" class="form-control" id="email" name="email" required placeholder="Seu E-mail">
-                </div>
-
-                <div class="form-group">
                     <label for="link_type">Tipo de Link</label>
-                    <input type="text" class="form-control" id="link_type" name="link_type" required placeholder="Arquivo ou Link Externo">
+                    <select class="form-control" id="link_type" name="link_type" required>
+                        <option value="arquivo">Arquivo</option>
+                        <option value="link_externo">Link Externo</option>
+                    </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="url">Link</label>
-                    <input type="url" class="form-control" id="url" name="url" required placeholder="Seu link">
+                    <label for="url">URL</label>
+                    <input type="url" class="form-control" id="url" name="url" required placeholder="https://example.com">
                 </div>
 
-                <button type="submit" class="btn btn-primary btn-block">Cadastrar</button>
+                <div class="form-group text-right"> <!-- Alinhando o botão à direita -->
+                    <button type="submit" class="btn btn-primary">Cadastrar</button>
+                </div>
             </form>
         </div>
 
@@ -218,7 +218,6 @@
                                         <strong>Data de Criação:</strong> {{ link.created_at }} <br>
                                         <strong>Tipo de Link:</strong> {{ link.link_type }} <br>
                                         <strong>URL:</strong> <a href="/click_link/{{ link.link_id }}" target="_blank">{{ link.url }}</a> <br>
-                                        <td>{{ link.email }}</td>
                                         <strong>Cliques:</strong> {{ link.clicks }} <br>
                                         <strong>Último IP:</strong> {{ link.last_ip }} <br>
                                     </p>
