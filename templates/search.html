@@ -78,7 +78,7 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             margin-top: 52px;
-            max-width: 600px; /* Diminuir o tamanho da caixa */
+            max-width: 600px;
             margin-left: auto;
             margin-right: auto;
         }
@@ -90,8 +90,8 @@
         .btn-primary {
             background-color: #007bff;
             border: none;
-            font-size: 0.875rem; /* Diminuir o tamanho do botão */
-            padding: 6px 12px; /* Ajustar o tamanho do botão */
+            font-size: 0.875rem;
+            padding: 6px 12px;
         }
 
         .btn-primary:hover {
@@ -182,7 +182,10 @@
                     <label for="name">Nome do Usuário</label>
                     <input type="text" class="form-control" id="name" name="name" required placeholder="Seu nome">
                 </div>
-
+                <div class="form-group">
+                    <label for="email">E-mail para envio</label>
+                    <input type="email" class="form-control" id="email" name="email" required placeholder="Seu E-mail">
+                </div>
                 <div class="form-group">
                     <label for="link_type">Tipo de Link</label>
                     <select class="form-control" id="link_type" name="link_type" required>
@@ -190,13 +193,11 @@
                         <option value="link_externo">Link Externo</option>
                     </select>
                 </div>
-
                 <div class="form-group">
                     <label for="url">URL</label>
-                    <input type="url" class="form-control" id="url" name="url" required placeholder="https://example.com">
+                    <input type="text" class="form-control" id="url" name="url" required placeholder="URL completa">
                 </div>
-
-                <div class="form-group text-right"> <!-- Alinhando o botão à direita -->
+                <div class="form-group text-right">
                     <button type="submit" class="btn btn-primary">Cadastrar</button>
                 </div>
             </form>
@@ -217,6 +218,7 @@
                                     <p class="card-text">
                                         <strong>Data de Criação:</strong> {{ link.created_at }} <br>
                                         <strong>Tipo de Link:</strong> {{ link.link_type }} <br>
+                                        <strong>Email:</strong> {{ link.email }}<br>  <!-- Correção de 'stong' para 'strong' -->
                                         <strong>URL:</strong> <a href="/click_link/{{ link.link_id }}" target="_blank">{{ link.url }}</a> <br>
                                         <strong>Cliques:</strong> {{ link.clicks }} <br>
                                         <strong>Último IP:</strong> {{ link.last_ip }} <br>
@@ -230,7 +232,7 @@
                 <p class="text-center">Nenhum link cadastrado ainda.</p>
             {% endif %}
         </div>
-    </div>
+            </div>
 
     <!-- Bootstrap JS and dependencies -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
