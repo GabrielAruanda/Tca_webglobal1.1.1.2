@@ -18,127 +18,143 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <style>
+        /* Estilo geral do corpo da página */
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f8f9fa;
-            color: #343a40;
-            transition: background-color 0.5s, color 0.5s;
+            font-family: 'Poppins', sans-serif; /* Define a fonte 'Poppins' para o texto da página */
+            background-color: #f8f9fa; /* Cor de fundo clara (quase branca) */
+            color: #343a40; /* Cor do texto escuro */
+            transition: background-color 0.5s, color 0.5s; /* Transição suave ao mudar para o modo escuro */
         }
 
+        /* Estilo para o modo escuro (dark mode) */
         .dark-mode {
-            background-color: #343a40;
-            color: #f8f9fa;
+            background-color: #343a40; /* Cor de fundo escura */
+            color: #f8f9fa; /* Cor do texto clara */
         }
 
+        /* Estilo para a barra de navegação (Navbar) */
         .navbar {
-            background-color: #007bff;
-            padding: 15px;
-            transition: background-color 0.5s;
+            background-color: #007bff; /* Cor de fundo azul para a navbar */
+            padding: 15px; /* Espaçamento interno da navbar */
+            transition: background-color 0.5s; /* Transição suave ao passar para o modo escuro */
         }
 
+        /* Estilo para a navbar no modo escuro */
         .dark-mode .navbar {
-            background-color: #0056b3;
+            background-color: #0056b3; /* Cor de fundo mais escura da navbar no modo escuro */
         }
 
+        /* Estilo para os itens da barra de navegação */
         .navbar-nav {
             display: flex;
-            justify-content: center;
-            margin-right: 150px;
+            justify-content: center; /* Alinha os itens no centro da navbar */
+            margin-right: 150px; /* Espaçamento à direita para balancear os itens */
         }
 
         .navbar-nav .nav-item {
-            margin-left: 20px;
+            margin-left: 20px; /* Espaçamento entre os itens da navbar */
         }
 
         .navbar-nav .nav-link {
-            color: #ffffff !important;
-            font-weight: 500;
-            transition: color 0.3s ease;
+            color: #ffffff !important; /* Cor do texto dos links */
+            font-weight: 500; /* Peso da fonte para destacar o texto */
+            transition: color 0.3s ease; /* Transição suave ao passar o mouse sobre os links */
         }
 
         .navbar-nav .nav-link:hover {
-            color: #ffcc00 !important;
+            color: #ffcc00 !important; /* Cor do texto quando o link é destacado com o mouse */
         }
 
+        /* Estilo para o conteúdo principal */
         .content {
-            margin-top: 80px;
+            margin-top: 80px; /* Espaçamento superior para separar o conteúdo da navbar fixa */
         }
 
         h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #007bff;
+            font-size: 2.5rem; /* Tamanho grande para o título principal */
+            font-weight: 700; /* Deixa o título em negrito */
+            color: #007bff; /* Cor azul para o título */
         }
 
+        /* Estilo para o título principal no modo escuro */
         .dark-mode h1 {
-            color: #ffcc00;
+            color: #ffcc00; /* Cor dourada no modo escuro */
         }
 
+        /* Estilo para o card de formulário */
         .card {
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-top: 52px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
+            border-radius: 10px; /* Bordas arredondadas */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave ao redor do card */
+            margin-top: 52px; /* Espaçamento superior */
+            max-width: 600px; /* Largura máxima do card */
+            margin-left: auto; /* Alinha o card ao centro */
+            margin-right: auto; /* Alinha o card ao centro */
         }
 
+        /* Estilo para o card no modo escuro */
         .dark-mode .card {
-            background-color: #4f4f4f;
+            background-color: #4f4f4f; /* Cor de fundo escura para o card no modo escuro */
         }
 
+        /* Estilo para os botões */
         .btn-primary {
-            background-color: #007bff;
-            border: none;
-            font-size: 0.875rem;
-            padding: 6px 12px;
+            background-color: #007bff; /* Cor de fundo azul para o botão */
+            border: none; /* Remove a borda do botão */
+            font-size: 0.875rem; /* Tamanho de fonte pequeno para o botão */
+            padding: 6px 12px; /* Espaçamento interno do botão */
         }
 
+        /* Estilo para o botão no hover (quando o mouse passa sobre o botão) */
         .btn-primary:hover {
-            background-color: #0056b3;
+            background-color: #0056b3; /* Cor de fundo mais escura para o botão quando o mouse passa por cima */
         }
 
+        /* Estilo para o alerta de sucesso */
         .alert {
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px; /* Bordas arredondadas para o alerta */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave para o alerta */
         }
 
+        /* Estilo para o alerta no modo escuro */
         .dark-mode .alert {
-            background-color: #3a3a3a;
+            background-color: #3a3a3a; /* Cor de fundo mais escura para o alerta no modo escuro */
         }
 
+        /* Estilo para o ícone de troca de tema */
         .theme-toggle {
-            cursor: pointer;
-            color: #ffffff;
-            transition: color 0.3s ease;
+            cursor: pointer; /* Torna o ponteiro do mouse como uma mãozinha */
+            color: #ffffff; /* Cor do ícone */
+            transition: color 0.3s ease; /* Transição suave para a troca de cor */
         }
 
         .theme-toggle:hover {
-            color: #ffcc00 !important;
+            color: #ffcc00 !important; /* Cor dourada do ícone ao passar o mouse por cima */
         }
 
-        /* Responsividade */
+        /* Estilo de responsividade (ajustes para telas menores) */
         @media (max-width: 991px) {
             .navbar-nav {
-                flex-direction: column;
-                text-align: center;
-                margin-left: 0;
-                margin-right: 0;
+                flex-direction: column; /* Alinha os itens da navbar em uma coluna */
+                text-align: center; /* Centraliza os itens da navbar */
+                margin-left: 0; /* Remove a margem à esquerda */
+                margin-right: 0; /* Remove a margem à direita */
             }
+
             .navbar-nav .nav-item {
-                margin-left: 0;
-                margin-top: 10px;
+                margin-left: 0; /* Remove o espaçamento à esquerda entre os itens */
+                margin-top: 10px; /* Adiciona um espaçamento superior entre os itens */
             }
+
             .navbar-nav .nav-item:first-child {
-                margin-top: 0;
+                margin-top: 0; /* Remove o espaço acima do primeiro item */
             }
 
             .navbar-toggler {
-                margin-right: 10px;
+                margin-right: 10px; /* Espaçamento à direita do ícone de menu */
             }
 
             h1 {
-                font-size: 2rem;
+                font-size: 2rem; /* Diminui o tamanho do título em telas menores */
             }
         }
     </style>
@@ -218,7 +234,7 @@
                                     <p class="card-text">
                                         <strong>Data de Criação:</strong> {{ link.created_at }} <br>
                                         <strong>Tipo de Link:</strong> {{ link.link_type }} <br>
-                                        <strong>Email:</strong> {{ link.email }}<br>  <!-- Correção de 'stong' para 'strong' -->
+                                        <strong>Email:</strong> {{ link.email }}<br>
                                         <strong>URL:</strong> <a href="/click_link/{{ link.link_id }}" target="_blank">{{ link.url }}</a> <br>
                                         <strong>Cliques:</strong> {{ link.clicks }} <br>
                                         <strong>Último IP:</strong> {{ link.last_ip }} <br>
@@ -232,7 +248,7 @@
                 <p class="text-center">Nenhum link cadastrado ainda.</p>
             {% endif %}
         </div>
-            </div>
+    </div>
 
     <!-- Bootstrap JS and dependencies -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

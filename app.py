@@ -53,9 +53,9 @@ def extract_short_code(url):
     """Extrai as 4 primeiras letras do nome da URL, ignorando 'www' e 'https'."""
     url = url.replace('https://', '')  # Remove o prefixo 'https://' se existir.
     url = url.replace('http://', '')   # Remove o prefixo 'http://' se existir.
-    url = url.replace('www.', '')       # Remove o prefixo 'www.' se existir.
-    short_code = url[:4].upper()        # Extrai as 4 primeiras letras da URL e as transforma em maiúsculas.
-    return f"WEB-{short_code}"          # Retorna o código curto no formato "Web-XXXX".
+    url = url.replace('www.', '')      # Remove o prefixo 'www.' se existir.
+    short_code = url[:4].upper()       # Extrai as 4 primeiras letras da URL e as transforma em maiúsculas.
+    return f"WEB-{short_code}"         # Retorna o código curto no formato "WEB-XXXX".
 
 def generate_unique_short_code(original_url):
     """Gera um código curto único para a URL fornecida."""
@@ -67,13 +67,15 @@ def generate_unique_short_code(original_url):
         if cursor.fetchone()[0] == 0:
             cursor.close()
             return short_code  # Se o código não existir, retorna o código curto.
-        # Se o código já existir, gera um novo código curto.
+        # Se o código já existir, gera um novo código curto com base no microsegundo atual.
         short_code = extract_short_code(original_url) + str(datetime.now().microsecond)
         cursor.close()
 
+# Rota para a página inicial onde o usuário pode encurtar URLs.
 @app.route("/", methods=["GET", "POST"])
 def index():
-    """Página principal para encurtar URLs."""
+    """Página principal para encurtar URLs. Quando um formulário é enviado com uma URL,
+    gera um código curto e exibe a URL encurtada. Para GET, exibe o formulário."""
     if request.method == "POST":
         # Recebe a URL original do formulário enviado via POST.
         original_url = request.form["original_url"]
@@ -93,9 +95,10 @@ def index():
 
     return render_template("index.html")  # Renderiza a página principal para solicitações GET.
 
+# Rota para redirecionar o usuário para a URL original com base no código curto.
 @app.route("/<short_code>")
 def redirect_url(short_code):
-    """Redireciona para a URL original com base no código curto fornecido."""
+    """Redireciona para a URL original com base no código curto fornecido. Atualiza também as informações de clique no banco de dados."""
     cursor = db.cursor(dictionary=True)
     # Recupera a URL original associada ao código curto.
     cursor.execute("SELECT original_url FROM urls WHERE short_code = %s", (short_code,))
@@ -104,7 +107,7 @@ def redirect_url(short_code):
     if url_data:
         client_ip = request.remote_addr  # Obtém o IP do cliente.
         # Atualiza o registro no banco de dados com a data e IP do último clique, e incrementa a contagem de cliques.
-        cursor.execute("""
+        cursor.execute(""" 
             UPDATE urls 
             SET last_click_at = %s, last_click_ip = %s, click_count = click_count + 1 
             WHERE short_code = %s
@@ -116,9 +119,10 @@ def redirect_url(short_code):
         cursor.close()
         return "URL não encontrada", 404  # Retorna um erro 404 se o código curto não for encontrado.
 
+# Rota para exibir todas as URLs encurtadas e suas informações no banco de dados.
 @app.route("/urls")
 def show_urls():
-    """Exibe todas as URLs encurtadas e suas informações."""
+    """Exibe todas as URLs encurtadas e suas informações, incluindo o número de cliques."""
     cursor = db.cursor(dictionary=True)
     # Recupera todas as URLs do banco de dados.
     cursor.execute("SELECT * FROM urls")
@@ -126,9 +130,10 @@ def show_urls():
     cursor.close()
     return render_template("urls.html", urls=urls)  # Renderiza a página com a lista de todas as URLs encurtadas.
 
+# Rota para exibir um gráfico de barras com a contagem de cliques de cada URL.
 @app.route("/charts")
 def charts():
-    """Exibe um gráfico com a contagem de cliques para cada URL."""
+    """Exibe um gráfico interativo mostrando a contagem de cliques de cada URL encurtada."""
     cursor = db.cursor(dictionary=True)
     # Recupera dados das URLs do banco de dados.
     cursor.execute("SELECT short_code, original_url, click_count, created_at, last_click_at, last_click_ip FROM urls")
@@ -139,6 +144,7 @@ def charts():
     df = pd.DataFrame(urls)
 
     if urls:
+        # Cria um gráfico de barras com a contagem de cliques para cada URL.
         fig = px.bar(df, x='short_code', y='click_count', labels={'short_code': 'Short Code', 'click_count': 'Clicks'}, title='URL Clicks')
 
         # Converte o gráfico para HTML.
@@ -154,10 +160,10 @@ def charts():
     }]
     return render_template("charts.html", url_data=url_vazio)
 
-
+# Rota para gerar e baixar relatórios em formato pptx, docx ou xlsx.
 @app.route("/download/<file_type>")
 def download_report(file_type):
-    """Gera e baixa um relatório no formato especificado (pptx, docx, xlsx)."""
+    """Gera um relatório no formato especificado (pptx, docx ou xlsx) com informações das URLs encurtadas."""
     cursor = db.cursor(dictionary=True)
     # Recupera dados das URLs do banco de dados.
     cursor.execute("SELECT short_code, original_url, click_count, created_at, last_click_at, last_click_ip FROM urls")
@@ -165,7 +171,7 @@ def download_report(file_type):
     cursor.close()
 
     if not urls:
-        return "nenhum dado", 400  # Retorna um erro 400 caso nenhum dado.
+        return "Nenhum dado", 400  # Retorna um erro 400 caso nenhum dado seja encontrado.
         
     if file_type == 'pptx':
         # Cria uma apresentação PowerPoint.
@@ -219,7 +225,6 @@ def download_report(file_type):
 
         return send_file(output, as_attachment=True, download_name='report.xlsx')
 
-
     elif file_type == 'docx':
         # Cria um documento Word.
         doc = Document()
@@ -246,29 +251,31 @@ def download_report(file_type):
     else:
         return "Invalid file type", 400  # Retorna um erro 400 se o tipo de arquivo for inválido.
 
-# Rota para exibir e registrar links
+# Rota para exibir e registrar links manualmente
 @app.route('/register_url', methods=['GET', 'POST'])
 def register_url():
+    """Página para registrar um novo link manualmente no banco de dados. Após o registro, redireciona para a mesma página."""
     if request.method == 'POST':
+        # Recebe os dados do formulário para registrar um novo link.
         name = request.form['name']
         link_type = request.form['link_type']
         url = request.form['url']
         email = request.form['email']
 
-        # Conectar ao banco de dados e registrar o link
+        # Conectar ao banco de dados e registrar o link.
         conn = mysql.connector.connect(**db_config)
         cursor = conn.cursor()
         cursor.execute("INSERT INTO links (name, email, link_type, url) VALUES (%s, %s, %s, %s)", (name, email, link_type, url))
-        conn.commit()
+        conn.commit()  # Confirma a transação no banco de dados.
         cursor.close()
         conn.close()
 
-        return redirect('/register_url')  # Redirecionar após o cadastro
+        return redirect('/register_url')  # Redireciona após o cadastro.
 
-    # Recuperar os links cadastrados com cliques e últimos IPs
+    # Recuperar os links cadastrados com cliques e últimos IPs.
     conn = mysql.connector.connect(**db_config)
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("""
+    cursor.execute(""" 
         SELECT 
             l.id AS link_id,
             l.name,
@@ -285,49 +292,48 @@ def register_url():
         GROUP BY 
             l.id
     """)
-    links = cursor.fetchall()
+    links = cursor.fetchall()  # Obtém os links cadastrados.
     cursor.close()
     conn.close()
 
-    return render_template('search.html', links=links)  # Renderizar a página com os links cadastrados
+    return render_template('search.html', links=links)  # Renderiza a página com os links cadastrados.
 
-
-# Função para exibir os links cadastrados
+# Rota para exibir links e fazer pesquisas
 @app.route("/search", methods=["GET"])
 def search():
-    query = request.args.get("q")
-    search_path = request.args.get("path")
+    """Rota para exibir e pesquisar links no banco de dados."""
+    query = request.args.get("q")  # Obtém o parâmetro de pesquisa.
+    search_path = request.args.get("path")  # Obtém o parâmetro de caminho.
 
-    # Código para verificar e processar a pesquisa
+    # Código para verificar e processar a pesquisa.
     if not search_path:
         return render_template("search.html", error="Erro: O parâmetro de caminho não foi fornecido."), 400
 
-    # Processar o caminho se for uma URL
+    # Processar o caminho se for uma URL.
     if is_url(search_path):
-        result = search_online(search_path)
+        result = search_online(search_path)  # Função fictícia para pesquisar online.
         return render_template("search.html", query=query, result=result)
 
-    # Se for um diretório local
+    # Se for um diretório local.
     else:
-        results = search_local_files(search_path, query)
+        results = search_local_files(search_path, query)  # Função fictícia para pesquisar arquivos locais.
         return render_template("search.html", query=query, results=results)
 
-        # Rota para registrar cliques
-# Rota para registrar cliques
+# Rota para registrar cliques nos links
 @app.route('/click_link/<int:link_id>', methods=['GET'])
 def click_link(link_id):
-    # Capturar o endereço IP do usuário
+    """Rota que registra o clique de um usuário e redireciona para o link correspondente."""
     ip_address = request.remote_addr
 
-    # Conectar ao banco de dados e registrar o clique
+    # Conectar ao banco de dados e registrar o clique.
     conn = mysql.connector.connect(**db_config)
     cursor = conn.cursor()
 
-    # Inserir registro de clique
+    # Inserir registro de clique.
     cursor.execute("INSERT INTO clicks_links (url_id, click_time, ip_address) VALUES (%s, NOW(), %s)", (link_id, ip_address))
-    conn.commit()
+    conn.commit()  # Confirma a transação no banco de dados.
 
-    # Obter a URL original para redirecionar
+    # Obter a URL original para redirecionar.
     cursor.execute("SELECT url FROM links WHERE id = %s", (link_id,))
     original_url = cursor.fetchone()
     
@@ -335,13 +341,9 @@ def click_link(link_id):
     conn.close()
 
     if original_url:
-        return redirect(original_url[0])  # Redirecionar para a URL original
+        return redirect(original_url[0])  # Redireciona para a URL original.
 
-    return "URL não encontrada", 404  # Caso a URL não exista
+    return "URL não encontrada", 404  # Caso a URL não exista.
 
-
- 
 if __name__ == "__main__":
-    app.run(debug=True) 
-    
-    
+    app.run(debug=True)  # Inicia o aplicativo Flask no modo de depuração.

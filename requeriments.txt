@@ -1,5 +1,47 @@
-Flask
-mysql-connector-python
-matplotlib
-python-docx
-python-pptx
+# Flask: Framework web leve para Python. Usado para construir e rodar aplicações web.
+Flask==2.2.2
+
+# Flask-SQLAlchemy: Extensão do Flask para integração com bancos de dados relacionais usando SQLAlchemy ORM.
+Flask-SQLAlchemy==2.5.1
+
+# Flask-WTF: Extensão para formulários no Flask, que integra com o WTForms, facilitando a validação e processamento de formulários.
+Flask-WTF==1.0.1
+
+# Flask-Migrate: Extensão para gerenciar migrações de banco de dados, usando Alembic, em aplicações Flask.
+Flask-Migrate==3.1.0
+
+# Flask-Login: Extensão que fornece gerenciamento de sessão e autenticação para aplicações Flask.
+Flask-Login==0.6.2
+
+# MySQL-python (ou mysqlclient): Conector MySQL para Python, usado para conectar a um banco de dados MySQL.
+mysqlclient==2.1.1
+
+# Gunicorn: Servidor HTTP para execução de aplicações WSGI (como Flask) em produção.
+gunicorn==20.1.0
+
+# Flask-Cors: Extensão do Flask que facilita o gerenciamento de CORS (Cross-Origin Resource Sharing), permitindo que seu servidor Flask interaja com outras origens.
+Flask-Cors==3.1.1
+
+# pandas: Biblioteca poderosa para análise de dados, usada em projetos que exigem manipulação de dados tabulares (como DataFrames).
+pandas==1.5.2
+
+# matplotlib: Biblioteca para criação de gráficos estáticos, interativos e animados em Python.
+matplotlib==3.6.0
+
+# sqlalchemy: ORM (Object-Relational Mapping) para banco de dados relacional. Usado para abstrair interações com bancos de dados.
+SQLAlchemy==2.0.5
+
+# requests: Biblioteca popular para fazer requisições HTTP, ideal para interagir com APIs externas.
+requests==2.28.1
+
+# psycopg2: Conector PostgreSQL para Python. Usado para conectar e interagir com bancos de dados PostgreSQL.
+psycopg2==2.9.3
+
+# Flask-Bcrypt: Extensão do Flask que fornece funções de hash seguro para senhas, usando bcrypt.
+Flask-Bcrypt==1.0.1
+
+# flask-mail: Extensão para integrar o envio de e-mails em uma aplicação Flask.
+Flask-Mail==0.9.1
+
+# pytest: Framework de testes em Python, usado para escrever e rodar testes automatizados.
+pytest==7.2.1
