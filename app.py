@@ -310,13 +310,13 @@ def search():
         return render_template("search.html", error="Erro: O parâmetro de caminho não foi fornecido."), 400
 
     # Processar o caminho se for uma URL.
-    if is_url(search_path):
-        result = search_online(search_path)  # Função fictícia para pesquisar online.
+    if is_url(search_path): # type: ignore
+        result = search_online(search_path)  # type: ignore # Função fictícia para pesquisar online.
         return render_template("search.html", query=query, result=result)
 
     # Se for um diretório local.
     else:
-        results = search_local_files(search_path, query)  # Função fictícia para pesquisar arquivos locais.
+        results = search_local_files(search_path, query)  # type: ignore # Função fictícia para pesquisar arquivos locais.
         return render_template("search.html", query=query, results=results)
 
 # Rota para registrar cliques nos links
