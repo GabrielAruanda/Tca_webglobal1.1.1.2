@@ -169,7 +169,7 @@
         <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+                    <a class="nav-link" href="{{ url_for('index') }}">Start</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('show_urls') }}">Show All URLs</a>
@@ -178,7 +178,8 @@
                     <a class="nav-link" href="{{ url_for('charts') }}">View Analytics</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('search') }}">Search</a>
+                    <a class="nav-link" href="{{ url_for('search') }}">
+                        Link registration</a>
                 </li>
             </ul>
         </div>
@@ -188,33 +189,26 @@
     </nav>
 
     <div class="container">
-        <h1 class="text-center mb-4">Cadastro de Links</h1>
+        <h1 class="text-center mb-4">Link Registration</h1>
 
         <!-- Formulário para cadastro -->
         <div class="card p-4 shadow-sm">
-            <h3 class="card-title">Cadastrar Novo Link</h3>
+            <h3 class="card-title">Register New Link</h3>
             <form action="/register_url" method="POST">
                 <div class="form-group">
-                    <label for="name">Nome do Usuário</label>
-                    <input type="text" class="form-control" id="name" name="name" required placeholder="Seu nome">
+                    <label for="name">Username</label>
+                    <input type="text" class="form-control" id="name" name="name" required placeholder="Your name">
                 </div>
                 <div class="form-group">
-                    <label for="email">E-mail para envio</label>
-                    <input type="email" class="form-control" id="email" name="email" required placeholder="Seu E-mail">
-                </div>
-                <div class="form-group">
-                    <label for="link_type">Tipo de Link</label>
-                    <select class="form-control" id="link_type" name="link_type" required>
-                        <option value="arquivo">Arquivo</option>
-                        <option value="link_externo">Link Externo</option>
-                    </select>
+                    <label for="email">Email for shipping</label>
+                    <input type="email" class="form-control" id="email" name="email" required placeholder="Your Email">
                 </div>
                 <div class="form-group">
                     <label for="url">URL</label>
-                    <input type="text" class="form-control" id="url" name="url" required placeholder="URL completa">
+                    <input type="text" class="form-control" id="url" name="url" required placeholder="Full URL">
                 </div>
                 <div class="form-group text-right">
-                    <button type="submit" class="btn btn-primary">Cadastrar</button>
+                    <button type="submit" class="btn btn-primary">Register</button>
                 </div>
             </form>
         </div>
@@ -222,7 +216,8 @@
         <hr>
 
         <!-- Exibir os links cadastrados -->
-        <h2 class="text-center mt-5 mb-4">Links Cadastrados</h2>
+        <h2 class="text-center mt-5 mb-4">
+            Registered Links</h2>
         <div id="url_list">
             {% if links %}
                 <div class="row">
@@ -232,12 +227,11 @@
                                 <div class="card-body">
                                     <h5 class="card-title">{{ link.name }}</h5>
                                     <p class="card-text">
-                                        <strong>Data de Criação:</strong> {{ link.created_at }} <br>
-                                        <strong>Tipo de Link:</strong> {{ link.link_type }} <br>
+                                        <strong>Creation Date:</strong> {{ link.created_at }} <br>
                                         <strong>Email:</strong> {{ link.email }}<br>
                                         <strong>URL:</strong> <a href="/click_link/{{ link.link_id }}" target="_blank">{{ link.url }}</a> <br>
-                                        <strong>Cliques:</strong> {{ link.clicks }} <br>
-                                        <strong>Último IP:</strong> {{ link.last_ip }} <br>
+                                        <strong>Clicks:</strong> {{ link.clicks }} <br>
+                                        <strong>Last IP:</strong> {{ link.last_ip }} <br>
                                     </p>
                                 </div>
                             </div>
@@ -245,7 +239,7 @@
                     {% endfor %}
                 </div>
             {% else %}
-                <p class="text-center">Nenhum link cadastrado ainda.</p>
+                <p class="text-center">No link registered yet.</p>
             {% endif %}
         </div>
     </div>

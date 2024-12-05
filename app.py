@@ -258,14 +258,13 @@ def register_url():
     if request.method == 'POST':
         # Recebe os dados do formulário para registrar um novo link.
         name = request.form['name']
-        link_type = request.form['link_type']
         url = request.form['url']
         email = request.form['email']
 
         # Conectar ao banco de dados e registrar o link.
         conn = mysql.connector.connect(**db_config)
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO links (name, email, link_type, url) VALUES (%s, %s, %s, %s)", (name, email, link_type, url))
+        cursor.execute("INSERT INTO links (name, email, url) VALUES (%s, %s, %s)", (name, email, url))
         conn.commit()  # Confirma a transação no banco de dados.
         cursor.close()
         conn.close()
@@ -279,7 +278,6 @@ def register_url():
         SELECT 
             l.id AS link_id,
             l.name,
-            l.link_type,
             l.email,
             l.url,
             l.created_at,
