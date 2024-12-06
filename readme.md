@@ -83,18 +83,4 @@ Este projeto é uma aplicação web desenvolvida com Flask para gerenciar o encu
   - python-docx: Para geração de arquivos Word.
   - python-pptx: Para criação de apresentações PowerPoint.
 
----
-
-## 🗄️ Estrutura do Banco de Dados
-
-### Tabela `urls`
-| Campo             | Tipo          | Descrição                              |
-|--------------------|---------------|----------------------------------------|
-| `id`              | INT (PK)      | Identificador único.                   |
-| `original_url`    | VARCHAR(255)  | URL original fornecida pelo usuário.   |
-| `short_code`      | VARCHAR(50)   | Código curto gerado para a URL.        |
-| `created_at`      | DATETIME      | Data de criação da URL encurtada.      |
-| `last_click_at`   | DATETIME      | Data do último clique na URL.          |
-| `last_click_ip`   | VARCHAR(50)   | IP do último clique registrado.        |
-| `click_count`     | INT           | Número total de cliques acumulados.    |
 
